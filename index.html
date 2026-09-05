@@ -1,0 +1,373 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCC UG Counselling Portal 2026 - Round 2 Choice Filling & Locking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mcc: {
+              blue: '#003366',
+              light: '#0055a5',
+              accent: '#f39c12',
+              green: '#27ae60',
+              bg: '#f4f7f6',
+              border: '#d1d5db'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background: white; font-size: 12pt; }
+      .shadow-md, .shadow-lg { box-shadow: none !important; }
+    }
+    .print-only { display: none; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #0055a5; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #003366; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-mcc-light selection:text-white">
+
+  <!-- TOP GOVT BAR -->
+  <header class="bg-mcc-blue text-white no-print border-b-4 border-amber-500 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center gap-2">
+      <div class="flex items-center space-x-3">
+        <div class="bg-white p-1.5 rounded-full shadow">
+          <svg class="w-8 h-8 text-mcc-blue" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="font-bold text-base md:text-lg tracking-wide uppercase leading-tight">Medical Counselling Committee (MCC)</h1>
+          <p class="text-xs text-amber-300 font-medium">Directorate General of Health Services | Ministry of Health & Family Welfare, Govt. of India</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4 text-xs font-semibold">
+        <span class="bg-purple-700 px-3 py-1 rounded-full text-white flex items-center gap-1.5 shadow-sm border border-purple-400">
+          <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span> ROUND 2 counselling (2026-27)
+        </span>
+        <button onclick="triggerLogout()" class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white transition flex items-center gap-1">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CANDIDATE METRICS / PROFILE BANNER -->
+  <section class="bg-white border-b shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 py-3">
+      <div class="bg-gradient-to-r from-slate-50 to-blue-50 p-3 md:p-4 rounded-xl border border-blue-100 flex flex-col md:flex-row items-center justify-between gap-4">
+        
+        <!-- Profile info -->
+        <div class="flex items-center space-x-4 w-full md:w-auto">
+          <div class="w-14 h-14 rounded-full bg-mcc-blue text-white flex items-center justify-center font-bold text-xl border-2 border-amber-400 shadow">
+            AT
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="font-bold text-lg text-mcc-blue">AYUSH TYAGI</h2>
+              <span class="bg-blue-100 text-mcc-blue text-xs font-semibold px-2 py-0.5 rounded border border-blue-200">UR (Unreserved)</span>
+              <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-0.5 rounded border border-purple-200">Round 2 Upgrade Active</span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-1 text-xs text-slate-600 mt-1">
+              <p><span class="font-semibold text-slate-800">Roll No:</span> 4409106585</p>
+              <p><span class="font-semibold text-slate-800">App No:</span> 260410500605</p>
+              <p><span class="font-semibold text-slate-800">NEET Marks:</span> <span class="text-emerald-700 font-bold">695 / 720</span></p>
+              <p><span class="font-semibold text-slate-800">All India Rank:</span> <span class="text-mcc-light font-bold text-sm">119</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lock Status & Deadline Widget -->
+        <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm w-full md:w-auto justify-between md:justify-end">
+          <div>
+            <div class="text-xs text-slate-500 font-medium">Round 2 Lock Status</div>
+            <div id="statusBadge" class="font-bold text-sm text-emerald-600 flex items-center gap-1">
+              <i class="fa-solid fa-lock-open text-amber-500"></i> UNLOCKED
+            </div>
+          </div>
+          <div class="h-8 w-px bg-slate-200"></div>
+          <div class="text-right">
+            <div class="text-xs text-slate-500 font-medium">Deadline: <span class="font-bold text-slate-700">9th Sept, 5:00 PM</span></div>
+            <div id="countdown" class="text-xs font-mono font-bold text-red-600">Calculating...</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- NAVIGATION TABS -->
+  <nav class="bg-white border-b no-print sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto space-x-1">
+      <button onclick="switchTab('choiceFilling')" id="tab-choiceFilling" class="tab-btn active px-4 py-3 font-semibold text-sm border-b-2 border-mcc-blue text-mcc-blue flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-list-check"></i> Round 2 Choice Filling & Locking
+      </button>
+      <button onclick="switchTab('viewChoices')" id="tab-viewChoices" class="tab-btn px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-600 hover:text-mcc-blue flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-eye"></i> View Filled Choices (<span id="filledCountBadge">0</span>)
+      </button>
+      <button onclick="switchTab('mockResult')" id="tab-mockResult" class="tab-btn px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-600 hover:text-mcc-blue flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> R2 Mock Allotment Simulator
+      </button>
+      <button onclick="switchTab('printSlip')" id="tab-printSlip" class="tab-btn px-4 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-600 hover:text-mcc-blue flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-print"></i> Locked Slip / Print
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto p-3 md:p-4">
+
+    <!-- TAB 1: CHOICE FILLING & LOCKING -->
+    <div id="view-choiceFilling" class="tab-content space-y-4">
+      
+      <!-- Action Bar -->
+      <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs md:text-sm text-amber-900 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg"></i>
+          <span><strong>Round 2 Alert:</strong> Ensure choices are saved & locked before <strong>9th September 2026, 05:00 PM IST</strong>. Auto-locking will trigger if saved.</span>
+        </div>
+        <div class="flex items-center gap-2 self-end md:self-auto">
+          <span id="lastSavedText" class="text-xs text-slate-500 italic">Saved just now</span>
+          <button onclick="saveChoices(true)" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1 shadow-sm transition">
+            <i class="fa-solid fa-floppy-disk"></i> Save & Continue
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Dual Panel Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        
+        <!-- LEFT PANEL: Available Choices -->
+        <div class="lg:col-span-6 bg-white rounded-xl border shadow-sm flex flex-col h-[700px]">
+          <div class="p-3 border-b bg-slate-50 rounded-t-xl">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-building-columns text-mcc-light"></i> R2 Available Seats & Colleges
+              </h3>
+              <span id="availCount" class="text-xs bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-semibold">0 Colleges</span>
+            </div>
+
+            <!-- Filters -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+              <div>
+                <label class="block text-slate-500 font-medium mb-0.5">Quota</label>
+                <select id="filterQuota" onchange="filterAvailable()" class="w-full border rounded p-1.5 bg-white focus:ring-1 focus:ring-mcc-light">
+                  <option value="ALL">All Quotas</option>
+                  <option value="AIIMS">AIIMS / Open Seat Quota</option>
+                  <option value="AIQ">All India Quota (15%)</option>
+                  <option value="JIPMER">JIPMER Quota</option>
+                  <option value="CENTRAL">Central Universities (BHU/AMU)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-slate-500 font-medium mb-0.5">State</label>
+                <select id="filterState" onchange="filterAvailable()" class="w-full border rounded p-1.5 bg-white focus:ring-1 focus:ring-mcc-light">
+                  <option value="ALL">All States</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Puducherry">Puducherry</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                  <option value="Odisha">Odisha</option>
+                </select>
+              </div>
+
+              <div class="col-span-2 sm:col-span-1">
+                <label class="block text-slate-500 font-medium mb-0.5">Search</label>
+                <input type="text" id="filterSearch" oninput="filterAvailable()" placeholder="e.g. AIIMS, MAMC..." class="w-full border rounded p-1.5 focus:ring-1 focus:ring-mcc-light">
+              </div>
+            </div>
+          </div>
+
+          <!-- List Scroll -->
+          <div id="availableList" class="p-2 overflow-y-auto flex-grow divide-y divide-slate-100">
+            <!-- Dynamically injected -->
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL: Filled & Preference Ordered Choices -->
+        <div class="lg:col-span-6 bg-white rounded-xl border shadow-sm flex flex-col h-[700px]">
+          <div class="p-3 border-b bg-slate-50 rounded-t-xl flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-list-ol text-emerald-600"></i> Round 2 Preference List
+              </h3>
+              <p class="text-xs text-slate-500">Order from highest priority (1) to lowest</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="filledCount" class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">0 Selected</span>
+              <button onclick="removeAllChoices()" id="btnRemoveAll" class="text-xs text-red-600 hover:underline hover:text-red-800 font-medium">Clear All</button>
+            </div>
+          </div>
+
+          <!-- List Scroll -->
+          <div id="filledList" class="p-2 overflow-y-auto flex-grow divide-y divide-slate-100 bg-slate-50/50">
+            <!-- Dynamically injected -->
+          </div>
+
+          <!-- Lock Footer -->
+          <div class="p-3 border-t bg-white rounded-b-xl flex justify-between items-center gap-2">
+            <button onclick="quickFillTopChoices()" id="btnQuickFill" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-3 py-2 rounded font-semibold transition border border-indigo-200">
+              <i class="fa-solid fa-wand-magic"></i> Auto-fill R2 Upgrades for AIR 119
+            </button>
+            
+            <div class="flex gap-2">
+              <button id="btnLockModal" onclick="openLockModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs md:text-sm px-4 py-2 rounded font-bold transition flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-lock"></i> Lock R2 Choices
+              </button>
+              <button id="btnUnlockChoices" onclick="unlockChoices()" class="hidden bg-amber-500 hover:bg-amber-600 text-white text-xs md:text-sm px-4 py-2 rounded font-bold transition flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-key"></i> Unlock Choices
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 2: VIEW FILLED CHOICES SUMMARY -->
+    <div id="view-viewChoices" class="tab-content hidden space-y-4">
+      <div class="bg-white rounded-xl border p-4 shadow-sm">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-3 mb-4 gap-2">
+          <div>
+            <h3 class="font-bold text-lg text-mcc-blue">Round 2 Submitted Choices Summary</h3>
+            <p class="text-xs text-slate-500">Round 2 NEET UG All India Counselling 2026</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="window.print()" class="bg-slate-800 hover:bg-black text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1">
+              <i class="fa-solid fa-print"></i> Print Summary
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b">
+                <th class="p-3 font-bold text-center border-r w-12">Pref No</th>
+                <th class="p-3 font-bold border-r">Institute Name</th>
+                <th class="p-3 font-bold border-r">Course</th>
+                <th class="p-3 font-bold border-r">Quota</th>
+                <th class="p-3 font-bold border-r">State</th>
+                <th class="p-3 font-bold text-center">Opening-Closing AIR</th>
+              </tr>
+            </thead>
+            <tbody id="summaryTableBody" class="divide-y">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: MOCK ALLOTMENT SIMULATOR -->
+    <div id="view-mockResult" class="tab-content hidden space-y-4">
+      <div class="bg-white rounded-xl border p-6 shadow-sm">
+        <div class="text-center max-w-2xl mx-auto space-y-3">
+          <div class="inline-block bg-purple-100 text-purple-800 p-3 rounded-full text-2xl font-bold">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <h3 class="text-xl font-bold text-mcc-blue">Round 2 Mock Seat Allotment Result</h3>
+          <p class="text-xs text-slate-600">
+            Based on Round 2 vacancy trends and your All India Rank <strong class="text-mcc-blue font-bold">119</strong> (Score: 695), here is your simulated Round 2 allotment probability.
+          </p>
+
+          <button onclick="runMockAllotment()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-lg shadow transition inline-flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-play"></i> Run Round 2 Simulation
+          </button>
+        </div>
+
+        <div id="mockResultBox" class="mt-6 hidden border-t pt-6">
+          <!-- Dynamically populated allotment result -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: PRINTABLE SLIP / LOCK RECEIPT -->
+    <div id="view-printSlip" class="tab-content hidden space-y-4">
+      <div id="printSlipContainer" class="bg-white p-6 rounded-xl border shadow-sm max-w-4xl mx-auto text-slate-800 border-slate-300">
+        
+        <!-- Printable Header -->
+        <div class="border-b-2 border-mcc-blue pb-4 mb-4 text-center">
+          <div class="font-bold text-xl uppercase tracking-wide text-mcc-blue">Medical Counselling Committee (MCC)</div>
+          <div class="text-xs font-semibold text-slate-600">Directorate General of Health Services, Ministry of Health & Family Welfare</div>
+          <div class="text-sm font-bold text-purple-700 mt-2 underline">NEET-UG 2026 ROUND-2 FINAL LOCKED CHOICE SLIP</div>
+        </div>
+
+        <!-- Candidate Details Grid -->
+        <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-xs bg-slate-50 p-4 rounded-lg border border-slate-200 mb-4">
+          <p><strong>Candidate Name:</strong> AYUSH TYAGI</p>
+          <p><strong>Roll Number:</strong> 4409106585</p>
+          <p><strong>Application Number:</strong> 260410500605</p>
+          <p><strong>All India Rank (AIR):</strong> 119</p>
+          <p><strong>NEET Score:</strong> 695 / 720</p>
+          <p><strong>Category:</strong> UR / General</p>
+          <p><strong>Counselling Phase:</strong> ROUND 2</p>
+          <p><strong>Deadline Target:</strong> 9th Sept 2026, 05:00 PM</p>
+          <p><strong>Choice Lock Timestamp:</strong> <span id="lockTimestampDisplay">NOT LOCKED YET</span></p>
+          <p><strong>IP Hash:</strong> <span class="font-mono text-slate-500">103.21.124.89 (R2-VERIFIED)</span></p>
+        </div>
+
+        <!-- Locked Choices Table -->
+        <div class="mb-6">
+          <h4 class="font-bold text-xs uppercase tracking-wider text-slate-700 mb-2 border-b pb-1">Round 2 Locked Choices</h4>
+          <table class="w-full text-left text-xs border border-collapse">
+            <thead>
+              <tr class="bg-slate-100 border-b">
+                <th class="p-2 border text-center">Choice #</th>
+                <th class="p-2 border">Institute Name</th>
+                <th class="p-2 border">Course</th>
+                <th class="p-2 border">Quota</th>
+              </tr>
+            </thead>
+            <tbody id="printSlipTableBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Verification Signature Footer -->
+        <div class="flex justify-between items-end border-t pt-6 text-xs text-slate-600">
+          <div class="text-center">
+            <div class="w-24 h-24 bg-slate-100 border border-slate-300 rounded flex items-center justify-center font-mono text-[10px] text-slate-400 p-1 text-center">
+              [QR R2 VERIFY]
+            </div>
+            <p class="mt-1 font-mono text-[10px]">MCC-UG-2026-R2-VERIFIED</p>
+          </div>
+
+          <div class="text-right space-y-1">
+            <div class="h-10"></div>
+            <p class="font-bold text-slate-800">Candidate Signature: <span class="font-serif italic font-normal text-sm">Ayush Tyagi</span></p>
+            <p class="text-[10px] text-slate-400">System Generated Document. No physical signature required.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center no-print">
+        <button onclick="window.print()" class="bg-mcc-blue hover:bg-mcc-light text-white font-bold px-6 py-2 rounded shadow transition inline-flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-print"></i> Print Official R2 Choice Lock Slip
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- LOCK CONFIRMATION MODAL -->
+  <div id="lockModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z
